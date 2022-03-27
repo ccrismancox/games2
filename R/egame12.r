@@ -161,7 +161,7 @@ logLik12Base <- function(b, y, regr, link, type, ...)
   return(sum(ans))
 }
 
-logLik12 <- function(b, y, regr, link, type,Cauchy, Firth, FirthExtra,...)
+logLik12 <- function(b, y, regr, link, type, logF, Cauchy, Firth, FirthExtra,...)
 {
   names(regr) <- character(length(regr))
   names(regr)[1:4] <- c("X1", "X3", "X4", "Z")
@@ -181,6 +181,10 @@ logLik12 <- function(b, y, regr, link, type,Cauchy, Firth, FirthExtra,...)
     if(D$sign<0){warning("The determinant of the Hessian is negative.  Consider switching to Cauchy.")}
     D <-  D$m/2
     ans <- sum(ans, D, na.rm=TRUE)
+  }
+  if(logF){
+    ans <- sum(ans,sum(b/2 -log(1+exp(b))))
+    
   }
   return(sum(ans))
 }
@@ -386,8 +390,9 @@ makeResponse12 <- function(yf)
 ##' earlier fit converged to a non-global maximum.
 ##' @param method character string specifying which optimization routine to use
 ##' (see \code{\link{maxLik}})
-##' @param Cauchy To come
-##' @param Firth To come
+##' @param logF logical: penalize the log likelihood with the log-F(1,1) penalty
+##' @param Cauchy logical: penalize the log likelihood with the Cauchy(0, 2.5) penalty
+##' @param Firth logical: penalize the log likelihood with the Jeffreys prior penalty
 ##' @param ... other arguments to pass to the fitting function (see
 ##' \code{\link{maxLik}}).
 ##' @return An object of class \code{c("game", "egame12")}. A
@@ -448,6 +453,7 @@ egame12 <- function(formulas, data, subset, na.action,
                     bootreport = TRUE,
                     profile,
                     method = "BFGS",
+                    logF = FALSE,
                     Cauchy = FALSE,
                     Firth = FALSE,
                     ...)
@@ -498,8 +504,8 @@ egame12 <- function(formulas, data, subset, na.action,
     link <- "probit"
   }
   ###Firth Checks
-  if(Cauchy && Firth){
-    stop("Chose either Cauchy (Numeric) or Firth (Analytic), not both")
+  if(sum(Cauchy, Firth, logF) > 1){
+    stop("Chose only one penalty Cauchy, logF, or Firth")
   }
   
   ## make the model frame
@@ -564,7 +570,7 @@ egame12 <- function(formulas, data, subset, na.action,
   
   ## use the gradient iff no regressors in variance
   gr <- if (is.null(sdformula)) logLikGrad12 else NULL
-  if(Cauchy | Firth){gr <- NULL}
+  if(Cauchy |  Firth | logF){gr <- NULL}
   
   ## deal with fixed utilities
   fvec <- rep(FALSE, length(sval))
@@ -621,7 +627,7 @@ egame12 <- function(formulas, data, subset, na.action,
   
   results <- maxLik(logLik = logLik12, grad = gr, start = sval, fixed = fvec,
                     method = method, y = y, regr = regr, link = link, type =
-                      type, Cauchy=Cauchy, Firth=Firth, FirthExtra=FirthExtra,...)
+                      type, logF=logF, Cauchy=Cauchy, Firth=Firth, FirthExtra=FirthExtra,...)
   
   ## some optimization routines in maxLik have different convergence codes for
   ## success, so we need to retrieve the proper code(s) for the supplied
@@ -634,11 +640,12 @@ egame12 <- function(formulas, data, subset, na.action,
   
   ## check local identification
   lid <- checkLocalID(results$hessian, fvec)
-  if(Cauchy | Firth){
+  if(Cauchy | Firth | logF){
     probs <- makeProbs12(results$estimate, regr, link, type)
     u <-  makeUtils(results$estimate, regr, nutils = 4,
                     unames = c("u11", "u13", "u14", "u24"))
-    H <- hessian12(results$estimate, y=y, regr=regr, link=link, type=type, FirthExtra=FirthExtra, p=probs, u=u)  
+    H <- hessian12(results$estimate, y=y, regr=regr, link=link, type=type, 
+                   FirthExtra=FirthExtra, p=probs, u=u)  
   }else{
     H <- results$hessian
   }
@@ -651,7 +658,7 @@ egame12 <- function(formulas, data, subset, na.action,
     bootMatrix <-
       gameBoot(boot, report = bootreport, estimate = sval, y =
                  y, regr = regr, fn = logLik12, gr = gr, fixed = fvec,
-               method = method, link = link, type = type,
+               method = method, link = link, type = type, logF=logF,
                Cauchy = Cauchy, Firth = Firth, FirthExtra=FirthExtra,...)
   }
   
@@ -666,7 +673,10 @@ egame12 <- function(formulas, data, subset, na.action,
   }
   
   ans$log.likelihood <- logLik12(results$estimate, y = y, regr = regr, link =
-                                   link, type = type, Cauchy = Cauchy, Firth = Firth, FirthExtra=FirthExtra)
+                                   link, type = type, 
+                                 logF=logF,
+                                 Cauchy = Cauchy,
+                                 Firth = Firth, FirthExtra=FirthExtra)
   # ##sanity check on the hessians##
   # ans$finalHessian <- results$hessian
   # 
@@ -683,7 +693,7 @@ egame12 <- function(formulas, data, subset, na.action,
   ans$convergence <- list(method = method, iter = nIter(results), code =
                             results$code, message = results$message, gradient =
                             !is.null(gr),
-                          Penalty = c(Cauchy, Firth),
+                          Penalty = c(logF,Cauchy, Firth),
                           # gradMaxLik = results$gradient,
                           # gradNumDeriv = Grad,
                           OPG=OPG)
