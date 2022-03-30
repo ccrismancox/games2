@@ -453,15 +453,17 @@ egame12 <- function(formulas, data, subset, na.action,
                     bootreport = TRUE,
                     profile,
                     method = "BFGS",
-                    logF = FALSE,
-                    Cauchy = FALSE,
-                    Firth = FALSE,
+                    penalty= c("none", "Firth", "Cauchy", "logF"),
                     ...)
 {
   cl <- match.call()
   
   link <- match.arg(link)
   type <- match.arg(type)
+  penalty <- match.arg(penalty)
+  Firth <- (penalty=="Firth")
+  Cauchy <- (penalty=="Cauchy")
+  logF <- (penalty=="logF")
   
   ## various sanity checks
   formulas <- checkFormulas(formulas)
