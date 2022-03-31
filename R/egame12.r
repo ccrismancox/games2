@@ -390,9 +390,7 @@ makeResponse12 <- function(yf)
 ##' earlier fit converged to a non-global maximum.
 ##' @param method character string specifying which optimization routine to use
 ##' (see \code{\link{maxLik}})
-##' @param logF logical: penalize the log likelihood with the log-F(1,1) penalty
-##' @param Cauchy logical: penalize the log likelihood with the Cauchy(0, 2.5) penalty
-##' @param Firth logical: penalize the log likelihood with the Jeffreys prior penalty
+##' @param penalty type of penalty if any to use
 ##' @param ... other arguments to pass to the fitting function (see
 ##' \code{\link{maxLik}}).
 ##' @return An object of class \code{c("game", "egame12")}. A
