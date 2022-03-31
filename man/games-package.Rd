@@ -4,9 +4,6 @@
 \name{games-package}
 \alias{games-package}
 \title{A package for estimating strategic statistical models.}
-\description{
-A package for estimating strategic statistical models.
-}
 \section{Acknowledgements}{
  We thank the Wallis Institute of Political
 Economy for financial support.

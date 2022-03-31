@@ -19,8 +19,7 @@ egame12(
   bootreport = TRUE,
   profile,
   method = "BFGS",
-  Firth1 = FALSE,
-  Firth2 = FALSE,
+  penalty = c("none", "Firth", "Cauchy", "logF"),
   ...
 )
 }
@@ -74,9 +73,7 @@ earlier fit converged to a non-global maximum.}
 \item{method}{character string specifying which optimization routine to use
 (see \code{\link{maxLik}})}
 
-\item{Firth1}{To come}
-
-\item{Firth2}{To come}
+\item{penalty}{type of penalty if any to use}
 
 \item{...}{other arguments to pass to the fitting function (see
 \code{\link{maxLik}}).}
