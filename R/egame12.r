@@ -172,7 +172,6 @@ logLik12 <- function(b, y, regr, link, type, logF, Cauchy, Firth, FirthExtra,...
     # ans <- sum(ans,  0.5* determinant(-numDeriv::hessian(func=logLik12Base, b, y=y, regr=regr, link=link, type=type))$m, na.rm=TRUE)
     # ans <- sum(ans,sum(dcauchy(b,scale=2.5, log = TRUE)))
     scale <- ifelse(str_detect(names(b), "Intercept"), 10,2.5)
-    
     ans <- sum(ans,sum(-log((1+ (b/scale)^2))))
   }
   if(Firth){
