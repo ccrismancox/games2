@@ -184,7 +184,7 @@ logLik12 <- function(b, y, regr, link, type, logF, Cauchy, Firth, FirthExtra,...
     ans <- sum(ans, D, na.rm=TRUE)
   }
   if(logF){ #b*m/2 - m* log(1+exp(b))
-    m <- ifelse(str_detect(names(b), "Intercept"),2,2)
+    m <- ifelse(str_detect(names(b), "Intercept"),0,1)
     ans <- sum(ans,sum(b*m/2 - m* log(1+exp(b))))
     
   }
