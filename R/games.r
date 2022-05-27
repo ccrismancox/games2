@@ -155,7 +155,11 @@ print.summary.game <- function(x, ...)
     if (x$useboot) {
         cat("\nStandard errors estimated from bootstrap results\n")
     } else {
-        cat("\nStandard errors estimated from inverse Hessian or OPG\n")
+      if(x$OPG){
+        cat("\nStandard errors estimated using the outer product of gradients\n")
+      }else{
+        cat("\nStandard errors estimated from inverse Hessian\n")
+      }
     }
     if (length(x$fixed.terms)) {
         cat("\nFixed terms:\n")

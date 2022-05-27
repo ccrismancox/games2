@@ -392,7 +392,12 @@ makeResponse12 <- function(yf)
 ##' earlier fit converged to a non-global maximum.
 ##' @param method character string specifying which optimization routine to use
 ##' (see \code{\link{maxLik}})
-##' @param penalty type of penalty if any to use
+##' @param penalty type of penalty to use for penalized maximum likelihood estimation. 
+##' efault is \code{"none"} (no penalty is used). Options include 
+##' \item{\code{"Firth"}}{for Firth's (1993) Jeffreys prior penalty}}
+##' \item{\code{"Cauchy"}}{for a Cauchy(0,2.5) penalty on non-intercepts and a Cauchy(0, 10) for intercepts}
+##' \item{\code{"logF"}}{for a log-F(1,1) penalty}
+##' See Crisman-Cox, Gasparyan, and Signorino (2022) for more details on the use of penalized estimation.
 ##' @param ... other arguments to pass to the fitting function (see
 ##' \code{\link{maxLik}}).
 ##' @return An object of class \code{c("game", "egame12")}. A
@@ -439,7 +444,7 @@ makeResponse12 <- function(yf)
 ##'
 ##' Curtis S. Signorino.  2003.  "Structure and Uncertainty in Discrete Choice
 ##' Models."  \emph{Political Analysis} 11:316--344.
-##' @author Brenton Kenkel (\email{brenton.kenkel@@gmail.com}) and Curtis
+##' @author Casey Crisman-Cox (\email{ccrismancox@gmail.com}), Brenton Kenkel, and Curtis
 ##' S. Signorino
 ##' @example inst/examples/egame12.r
 egame12 <- function(formulas, data, subset, na.action,
@@ -651,7 +656,6 @@ egame12 <- function(formulas, data, subset, na.action,
   }else{
     H <- results$hessian
   }
-  rownames(H) <- colnames(H) <- colnames(results$hessian)  
   
   if (!lid)
     warning("Hessian is not negative definite; coefficients may not be locally identified")
@@ -668,6 +672,8 @@ egame12 <- function(formulas, data, subset, na.action,
   ans <- list()
   ans$coefficients <- results$estimate
   ans$vcov <- getGameVcov(H, fvec)
+  rownames(ans$vcov) <- colnames(ans$vcov) <- names(results$estimate)
+  
   OPG <- FALSE
   if(anyNA(diag(ans$vcov)) || any(diag(ans$vcov)<0)){
     ans$vcov <- getGameVcov(-crossprod(logLikGrad12(b = results$estimate, y = y, regr = regr,link = link,type = type)), fvec)
