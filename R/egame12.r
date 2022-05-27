@@ -672,13 +672,13 @@ egame12 <- function(formulas, data, subset, na.action,
   ans <- list()
   ans$coefficients <- results$estimate
   ans$vcov <- getGameVcov(H, fvec)
-  rownames(ans$vcov) <- colnames(ans$vcov) <- names(results$estimate)
   
   OPG <- FALSE
   if(anyNA(diag(ans$vcov)) || any(diag(ans$vcov)<0)){
     ans$vcov <- getGameVcov(-crossprod(logLikGrad12(b = results$estimate, y = y, regr = regr,link = link,type = type)), fvec)
     OPG <- TRUE
   }
+  rownames(ans$vcov) <- colnames(ans$vcov) <- names(results$estimate)
   
   ans$log.likelihood <- logLik12(results$estimate, y = y, regr = regr, link =
                                    link, type = type, 
