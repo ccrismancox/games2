@@ -651,7 +651,7 @@ egame12 <- function(formulas, data, subset, na.action,
   }else{
     H <- results$hessian
   }
-    
+  rownames(H) <- colnames(H) <- colnames(results$hessian)  
   
   if (!lid)
     warning("Hessian is not negative definite; coefficients may not be locally identified")
