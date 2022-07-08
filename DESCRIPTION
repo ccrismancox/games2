@@ -1,5 +1,5 @@
 Package: games2
-Title: Statistical Estimation of Game-Theoretic Models
+Title: BR estimation of strategic models
 Version: 0.1.1
 Date: 2022-07-08
 Authors@R: c(person(c("Curtis", "S."), "Signorino", role = "aut"),
