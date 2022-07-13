@@ -1,9 +1,10 @@
-##' A package for estimating strategic statistical models.
+##' BR estimation of strategic models
 ##' 
-##' @name games-package
+##' @name games2-package
+##' @description An extension to the games package for bias reduced penalized likelihood estimation
 ##' @docType package
 ##' @section Acknowledgements: We thank the Wallis Institute of Political
-##' Economy for financial support.
+##' Economy for financial support in making the original games package.
 ##' @references
 ##' Brenton Kenkel and Curtis S. Signorino.  2014.  "Estimating Extensive Form
 ##' Games in R."  \emph{Journal of Statistical Software} 56(8):1--27.
@@ -14,6 +15,7 @@
 ##' @import Formula
 ##' @import maxLik
 ##' @import MASS
+##' @import methods
 ##' @export predict.egame12
 ##' @export predict.egame122
 ##' @export predict.egame123
@@ -155,7 +157,7 @@ print.summary.game <- function(x, ...)
     if (x$useboot) {
         cat("\nStandard errors estimated from bootstrap results\n")
     } else {
-      if(x$OPG){
+      if(x$convergence$OPG){
         cat("\nStandard errors estimated using the outer product of gradients\n")
       }else{
         cat("\nStandard errors estimated from inverse Hessian\n")

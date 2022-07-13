@@ -58,6 +58,14 @@ indivLogLiks <- function(model, outcome = NULL)
     
     if (inherits(model, "game") && is.null(outcome)) {
         ans <- model$log.likelihood
+        if(inherits(model, "egame12")){
+          regr <- list()
+          for (i in seq_len(length(model$formulas)[2]))
+            regr[[i]] <- model.matrix(model$formulas, data = model$model, rhs = i)
+
+          ans <- logLik12Base(model$coef, y=model$y, regr=regr,link=model$link,
+                              type=model$type)
+        }
     } else if (inherits(model, "ultimatum")) {
         outcome <- c(offer = 1, accept = 2)[outcome]
         if (outcome == 1) {

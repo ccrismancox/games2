@@ -1,4 +1,4 @@
-library("games")
+library("games2")
 context("egame12 model")
 
 ## Same model as in example
@@ -29,7 +29,7 @@ test_that("log-likelihood is correctly computed", {
     ## Using `predict` method
     pp <- predict(fit_main)
     pp_observed <- pp[cbind(seq_along(fit_main$y), as.numeric(fit_main$y))]
-    expect_equal(fit_main$log.likelihood, log(pp_observed))
+    expect_equal(fit_main$log.likelihood, sum(log(pp_observed)))
 
     ## Calculated by hand
     cf <- coef(fit_fact)

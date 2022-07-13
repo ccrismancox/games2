@@ -73,7 +73,12 @@ earlier fit converged to a non-global maximum.}
 \item{method}{character string specifying which optimization routine to use
 (see \code{\link{maxLik}})}
 
-\item{penalty}{type of penalty if any to use}
+\item{penalty}{type of penalty to use for penalized maximum likelihood estimation.
+default is "none" (no penalty is used). Options include \describe{
+\item{"Firth"}{for Firth's (1993) Jeffreys prior penalty}
+\item{"Cauchy"}{for a Cauchy(0,2.5) penalty on non-intercepts and a Cauchy(0, 10) for intercepts}
+\item{"logF"}{for a log-F(1,1) penalty}}
+See Crisman-Cox, Gasparyan, and Signorino (2022) for more details on the use of penalized estimation.}
 
 \item{...}{other arguments to pass to the fitting function (see
 \code{\link{maxLik}}).}
@@ -247,6 +252,6 @@ postestimation analysis; \code{\link{makeFormulas}} for formula
 specification.
 }
 \author{
-Brenton Kenkel (\email{brenton.kenkel@gmail.com}) and Curtis
+Casey Crisman-Cox (\email{ccrismancox@gmail.com}), Brenton Kenkel, and Curtis
 S. Signorino
 }

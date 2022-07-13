@@ -3,15 +3,13 @@ Title: BR estimation of strategic models
 Version: 0.1.1
 Date: 2022-07-08
 Authors@R: c(person(c("Curtis", "S."), "Signorino", role = "aut"),
-person("Casey", "Crisman-Cox", role = c("aut", "cre"),
-    person("Brenton", "Kenkel", role = c("aut"),
-    email = "ccrismancox@gmail.com"))
+             person("Casey", "Crisman-Cox", role = c("aut", "cre"),  email = "ccrismancox@gmail.com"),
+             person("Brenton", "Kenkel", role = "aut"))
 Description: An extension to the games package for bias reduced penalized likelihood estimation
 License: GPL (>= 2)
 Depends: maxLik (>= 0.7-0), Formula (>= 0.2-0), MASS
 Imports: stringr, methods
 Suggests: testthat, numDeriv
-Packaged: 2015-02-22 20:21:27 UTC; brenton
 Author: Curtis S. Signorino [aut],
   Brenton Kenkel [aut],
   Casey Crisman-Cox [aut, cre]

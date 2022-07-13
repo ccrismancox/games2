@@ -171,7 +171,7 @@ profile.game <- function(fitted, which = 1:p, steps = 5, dist = 3, use.se =
       #   FirthExtra <- NULL
       # }
     }else{
-      Firth <- c(NULL, NULL)
+      Penalty <- rep(FALSE,3)
       FirthExtra  <- NULL
     }
     if (!fitted$convergence$gradient)
@@ -219,7 +219,9 @@ profile.game <- function(fitted, which = 1:p, steps = 5, dist = 3, use.se =
                                 sval, fixed = fvec, method = method, y = y, regr
                                 = regr, link = link, type = type, acc = acc,
                                 minOffer=minOffer, maxOffer = maxOffer, offerOnly = offerOnly,
-                                offertol = offertol, Cauchy=Penalty[1], Firth=Penalty[2], FirthExtra=FirthExtra,  ...),
+                                offertol = offertol, 
+                                logF=Penalty[1],  Cauchy = Penalty[2], Firth = Penalty[3], 
+                                FirthExtra=FirthExtra,...),
                          error = identity)
             if (inherits(results, "error")) {
                 thisAns[j, ] <- NA

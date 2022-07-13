@@ -158,7 +158,7 @@ logLik12Base <- function(b, y, regr, link, type, ...)
   probs <- makeProbs12(b, regr, link, type)
   logProbs <- actionsToOutcomes12(probs, log.p = TRUE)
   ans <- logProbs[cbind(1:nrow(logProbs), y)]
-  return(sum(ans))
+  return(ans)
 }
 
 logLik12 <- function(b, y, regr, link, type, logF, Cauchy, Firth, FirthExtra,...)
@@ -169,8 +169,6 @@ logLik12 <- function(b, y, regr, link, type, logF, Cauchy, Firth, FirthExtra,...
   logProbs <- actionsToOutcomes12(probs, log.p = TRUE)
   ans <- logProbs[cbind(1:nrow(logProbs), y)]
   if(Cauchy){
-    # ans <- sum(ans,  0.5* determinant(-numDeriv::hessian(func=logLik12Base, b, y=y, regr=regr, link=link, type=type))$m, na.rm=TRUE)
-    # ans <- sum(ans,sum(dcauchy(b,scale=2.5, log = TRUE)))
     scale <- ifelse(str_detect(names(b), "Intercept"), 10,2.5)
     ans <- sum(ans,sum(-log((1+ (b/scale)^2))))
   }
@@ -390,14 +388,14 @@ makeResponse12 <- function(yf)
 ##' @param profile output from running \code{\link{profile.game}} on a previous
 ##' fit of the model, used to generate starting values for refitting when an
 ##' earlier fit converged to a non-global maximum.
+##' @param penalty type of penalty to use for penalized maximum likelihood estimation.
+##' default is "none" (no penalty is used). Options include \describe{
+##' \item{"Firth"}{for Firth's (1993) Jeffreys prior penalty}
+##' \item{"Cauchy"}{for a Cauchy(0,2.5) penalty on non-intercepts and a Cauchy(0, 10) for intercepts}
+##' \item{"logF"}{for a log-F(1,1) penalty}}
+##' See Crisman-Cox, Gasparyan, and Signorino (2022) for more details on the use of penalized estimation. 
 ##' @param method character string specifying which optimization routine to use
 ##' (see \code{\link{maxLik}})
-##' @param penalty type of penalty to use for penalized maximum likelihood estimation. 
-##' efault is \code{"none"} (no penalty is used). Options include 
-##' \item{\code{"Firth"}}{for Firth's (1993) Jeffreys prior penalty}}
-##' \item{\code{"Cauchy"}}{for a Cauchy(0,2.5) penalty on non-intercepts and a Cauchy(0, 10) for intercepts}
-##' \item{\code{"logF"}}{for a log-F(1,1) penalty}
-##' See Crisman-Cox, Gasparyan, and Signorino (2022) for more details on the use of penalized estimation.
 ##' @param ... other arguments to pass to the fitting function (see
 ##' \code{\link{maxLik}}).
 ##' @return An object of class \code{c("game", "egame12")}. A
@@ -466,6 +464,7 @@ egame12 <- function(formulas, data, subset, na.action,
   link <- match.arg(link)
   type <- match.arg(type)
   penalty <- match.arg(penalty)
+  startvals <- match.arg(startvals)
   Firth <- (penalty=="Firth")
   Cauchy <- (penalty=="Cauchy")
   logF <- (penalty=="logF")
@@ -541,7 +540,6 @@ egame12 <- function(formulas, data, subset, na.action,
     if(is.numeric(startvals)){
       sval <- startvals
     }else{
-      startvals <- match.arg(startvals)
       if (startvals == "zero") {
         sval <- rep(0, sum(rcols))
       } else if (startvals == "unif") {
@@ -674,7 +672,7 @@ egame12 <- function(formulas, data, subset, na.action,
   ans$vcov <- getGameVcov(H, fvec)
   
   OPG <- FALSE
-  if(anyNA(diag(ans$vcov)) || any(diag(ans$vcov)<0)){
+  if(anyNA(diag(ans$vcov)[!fvec]) || any(diag(ans$vcov)[!fvec]<0)){
     ans$vcov <- getGameVcov(-crossprod(logLikGrad12(b = results$estimate, y = y, regr = regr,link = link,type = type)), fvec)
     OPG <- TRUE
   }

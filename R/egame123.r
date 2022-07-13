@@ -551,7 +551,7 @@ egame123 <- function(formulas, data, subset, na.action,
     ans$call <- cl
     ans$convergence <- list(method = method, iter = nIter(results), code =
                             results$code, message = results$message, gradient =
-                            !is.null(gr))
+                            !is.null(gr), OPG=FALSE)
     ans$formulas <- formulas
     ans$link <- link
     ans$type <- type

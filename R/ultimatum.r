@@ -471,8 +471,8 @@ ultimatum <- function(formulas, data, subset, na.action, minOffer=0,
         			maxOffer = maxOffer, offertol = offertol, offerOnly = offerOnly)
     ans$call <- cl
     ans$convergence <- list(method = method, iter = nIter(results), code =
-                            results$code, message = results$message, gradient =
-                            TRUE)
+                            results$code, message = results$message,
+                            gradient = TRUE, OPG=FALSE)
     ans$formulas <- formulas
     ans$link <- "logit"
     ans$type <- "private"
