@@ -3,8 +3,8 @@ Title: BR estimation of strategic models
 Version: 0.1.1
 Date: 2022-07-08
 Authors@R: c(person(c("Curtis", "S."), "Signorino", role = "aut"),
-             person("Casey", "Crisman-Cox", role = c("aut", "cre"),  email = "ccrismancox@gmail.com"),
-             person("Brenton", "Kenkel", role = "aut"))
+             person("Brenton", "Kenkel", role = "aut"),
+             person("Casey", "Crisman-Cox", role = c("aut", "cre"),  email = "ccrismancox@gmail.com"))
 Description: An extension to the games package for bias reduced penalized likelihood estimation
 License: GPL (>= 2)
 Depends: maxLik (>= 0.7-0), Formula (>= 0.2-0), MASS
