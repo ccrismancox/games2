@@ -5,7 +5,7 @@ Date: 2022-07-08
 Authors@R: c(person(c("Curtis", "S."), "Signorino", role = "aut"),
              person("Brenton", "Kenkel", role = "aut"),
              person("Casey", "Crisman-Cox", role = c("aut", "cre"),  email = "ccrismancox@gmail.com"))
-Description: An extension to the games package for bias reduced penalized likelihood estimation
+Description: This package is an extension to the games package. It includes penalized likelihood estimation routines for bias reduction and to combat separation.
 License: GPL (>= 2)
 Depends: maxLik (>= 0.7-0), Formula (>= 0.2-0), MASS
 Imports: stringr, methods
@@ -15,5 +15,5 @@ Author: Curtis S. Signorino [aut],
   Casey Crisman-Cox [aut, cre]
 Maintainer: Casey Crisman-Cox <ccrismancox@gmail.com>
 NeedsCompilation: no
-Repository: CRAN
+Repository: github
 RoxygenNote: 7.1.2
