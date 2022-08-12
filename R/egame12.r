@@ -464,7 +464,9 @@ egame12 <- function(formulas, data, subset, na.action,
   link <- match.arg(link)
   type <- match.arg(type)
   penalty <- match.arg(penalty)
-  startvals <- match.arg(startvals)
+  if(class(startvals)=="character"){
+    startvals <- match.arg(startvals)
+  }
   Firth <- (penalty=="Firth")
   Cauchy <- (penalty=="Cauchy")
   logF <- (penalty=="logF")
