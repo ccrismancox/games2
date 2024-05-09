@@ -52,10 +52,10 @@ profile.game <- function(fitted, which = 1:p, steps = 5, dist = 3, use.se =
                          TRUE, report = TRUE, ...)
 {
     ## get the regressors from the original model
-    mf <- match(c("subset", "na.action"), names(fitted$call), 0L)
+    mf <- match(c("data", "subset", "na.action"), names(fitted$call), 0L)
     mf <- fitted$call[c(1L, mf)]
     mf$formula <- fitted$formulas
-    mf$data <- fitted$model
+    # mf$data <- fitted$model
     mf$drop.unused.levels <- TRUE
     mf[[1]] <- as.name("model.frame")
     mf <- eval(mf, parent.frame())
