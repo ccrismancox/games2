@@ -1,17 +1,15 @@
 Package: games2
 Title: BR estimation of strategic models
 Version: 0.1.1
-Date: 2022-07-08
+Date: 2025-03-11
 Authors@R: c(person(c("Curtis", "S."), "Signorino", role = "aut"),
-             person("Brenton", "Kenkel", role = "aut"),
              person("Casey", "Crisman-Cox", role = c("aut", "cre"),  email = "ccrismancox@gmail.com"))
-Description: This package is an extension to the games package. It includes penalized likelihood estimation routines for bias reduction and to combat separation.
+Description: This package is an extension to the games package. It includes penalized likelihood estimation routines for bias reduction and to combat separation. It includes code by Brenton Kenkel from the original games package 
 License: GPL (>= 2)
 Depends: maxLik (>= 0.7-0), Formula (>= 0.2-0), MASS
 Imports: stringr, methods
 Suggests: testthat, numDeriv
 Author: Curtis S. Signorino [aut],
-  Brenton Kenkel [aut],
   Casey Crisman-Cox [aut, cre]
 Maintainer: Casey Crisman-Cox <ccrismancox@gmail.com>
 NeedsCompilation: no
